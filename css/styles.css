@@ -1,0 +1,2304 @@
+/* ==========================================================================
+   CUMPLE - STYLES.CSS
+   Estilos principales del proyecto interactivo de cumpleaños
+   ========================================================================== */
+
+:root {
+  /* Paleta cromática oficial */
+  --bg-cream: #FFF6E9;
+  --bg-white-warm: #FFFCF7;
+  --pink-pastel: #F9D7D9;
+  --pink-main: #F0789B;
+  --pink-deep: #E85D8D;
+  --peach: #F8E2CC;
+  --brown-dark: #57382E;
+  --brown-soft: #A77D6B;
+
+  /* Modern OKLCH tokens con fallbacks para compatibilidad y fidelidad absoluta */
+  --background: #FFF6E9;
+  --foreground: #57382E;
+  --card: rgba(255, 252, 247, 0.94);
+  --primary: #F0789B;
+  --primary-deep: #E85D8D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F9D7D9;
+  --muted-foreground: #A77D6B;
+  --cream-deep: #F8E2CC;
+  --cocoa-soft: #6E493D;
+  --border: #F3C5CD;
+
+  --envelope-paper: #FFF7EC;
+  --envelope-front: #F8CAD1;
+  --envelope-side: #FCE1E3;
+  --envelope-side-alt: #F7D3D7;
+  --envelope-edge: #E0859D;
+  --envelope-ink: #57382E;
+
+  --shadow-romantic: 0 12px 28px -10px rgba(240, 120, 155, 0.45);
+  --shadow-paper: 0 24px 70px -25px rgba(87, 56, 46, 0.22);
+  --shadow-envelope: 0 22px 45px -16px rgba(87, 56, 46, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --shadow-wax: 0 7px 13px -5px rgba(180, 50, 90, 0.55), inset 0 2px 2px rgba(255, 255, 255, 0.4), inset 0 -3px 4px rgba(160, 40, 80, 0.35);
+}
+
+@supports (color: oklch(0.7 0.1 10)) {
+  :root {
+    --background: oklch(0.975 0.018 80);
+    --foreground: oklch(0.34 0.045 45);
+    --card: oklch(0.995 0.01 70 / 92%);
+    --primary: oklch(0.73 0.145 7);
+    --primary-deep: oklch(0.66 0.19 12);
+    --primary-foreground: oklch(0.99 0.008 70);
+    --secondary: oklch(0.93 0.046 13);
+    --muted-foreground: oklch(0.55 0.047 45);
+    --cream-deep: oklch(0.92 0.045 77);
+    --cocoa-soft: oklch(0.48 0.055 45);
+    --border: oklch(0.87 0.052 37);
+    --envelope-paper: oklch(0.965 0.035 50);
+    --envelope-front: oklch(0.89 0.075 18);
+    --envelope-side: oklch(0.93 0.057 27);
+    --envelope-side-alt: oklch(0.91 0.065 14);
+    --envelope-edge: oklch(0.72 0.095 16);
+    --envelope-ink: oklch(0.45 0.065 35);
+  }
+}
+
+/* Reset y caja */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+svg {
+  display: block;
+}
+
+/* Contenedor global */
+.site {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Decoraciones ambientales */
+.decor {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.decor .f {
+  position: absolute;
+  color: rgba(240, 120, 155, 0.22);
+  font-size: 26px;
+  animation: float var(--dur) ease-in-out var(--delay) infinite;
+}
+
+.decor .f:nth-child(even) {
+  animation-name: float-even;
+}
+
+.decor .tw {
+  position: absolute;
+  color: rgba(232, 93, 141, 0.65);
+  font-size: 15px;
+  animation: twinkle var(--dur) ease-in-out var(--delay) infinite;
+}
+
+.decor .rise {
+  position: absolute;
+  bottom: -40px;
+  color: rgba(240, 120, 155, 0.3);
+  font-size: var(--s, 18px);
+  animation: rise var(--dur) linear var(--delay) infinite;
+  will-change: transform;
+}
+
+/* Contenedor canvas global de confeti */
+#fx {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* Control de sonido/música ambiental interactivo */
+.audio-ctrl {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(87, 56, 46, 0.12);
+  color: var(--primary);
+  font-size: 18px;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.audio-ctrl:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-romantic);
+}
+
+.audio-ctrl:active {
+  transform: scale(0.95);
+}
+
+/* Pantallas y transiciones */
+.screen {
+  position: relative;
+  z-index: 2;
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 16px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.screen.active {
+  display: flex;
+  animation: page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Tipografía manuscrita */
+.hand {
+  font-family: 'Gaegu', cursive;
+  font-weight: 700;
+}
+
+/* Textura suave de papel */
+.paper-grain {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(240, 120, 155, 0.08) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 80% 70%, rgba(248, 226, 204, 0.22) 0 1px, transparent 1.5px);
+  background-size: 22px 22px, 32px 32px;
+}
+
+.paper {
+  background-color: var(--card);
+  box-shadow: var(--shadow-paper);
+  border: 1px solid var(--border);
+}
+
+/* Botones principales ovalados rosados */
+.button {
+  height: 52px;
+  padding: 0 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: var(--primary-foreground);
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow-romantic);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  cursor: pointer;
+  outline: none;
+}
+
+.button:hover {
+  transform: translateY(-2.5px);
+  box-shadow: 0 16px 32px -8px rgba(232, 93, 141, 0.55);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.button.small {
+  height: 42px;
+  padding: 0 22px;
+  font-size: 14.5px;
+}
+
+.button svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* Cabeceras de sección */
+.section-head {
+  position: relative;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-head h1 {
+  font-size: 42px;
+  margin: 0;
+  line-height: 1.05;
+  color: var(--brown-dark);
+}
+
+.section-head h1::before,
+.section-head h1::after {
+  display: inline-block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.45em;
+  vertical-align: 0.75em;
+  color: var(--envelope-edge);
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.section-head h1::before {
+  content: "✧";
+  margin-right: 10px;
+}
+
+.section-head h1::after {
+  content: "✦";
+  margin-left: 10px;
+  animation-delay: -1.5s;
+}
+
+.section-head p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+/* ==========================================================================
+   1. BIENVENIDA (LANDING) 🎂
+   ========================================================================== */
+.landing {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 25%, #FFEAF1 0%, #FFD6E4 50%, #FFBFD6 100%);
+  padding: 40px 20px;
+}
+
+/* Globos 3D de corazón flotantes */
+.heart-balloon-wrap {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  animation: balloon-sway 6.5s ease-in-out infinite;
+}
+
+.heart-balloon-wrap.balloon-left {
+  top: 4%;
+  left: 3.5%;
+  width: clamp(90px, 14vw, 155px);
+  animation-delay: 0s;
+}
+
+.heart-balloon-wrap.balloon-right {
+  top: 5%;
+  right: 3.5%;
+  width: clamp(90px, 14vw, 155px);
+  animation-delay: -3.2s;
+}
+
+.heart-balloon-wrap.balloon-side-left {
+  bottom: 22%;
+  left: 2%;
+  width: clamp(60px, 9vw, 95px);
+  animation-delay: -1.6s;
+}
+
+.heart-balloon-wrap.balloon-side-right {
+  bottom: 24%;
+  right: 2%;
+  width: clamp(65px, 10vw, 105px);
+  animation-delay: -4.8s;
+}
+
+.balloon-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 14px 24px rgba(216, 20, 92, 0.38));
+}
+
+@keyframes balloon-sway {
+  0%, 100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-22px) rotate(4deg);
+  }
+}
+
+/* Tarjeta Romántica Central Amplia */
+.romantic-card {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 780px;
+  margin: 15px auto;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F8 100%);
+  border-radius: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 28px 70px -10px rgba(220, 35, 100, 0.28),
+    0 0 0 1.5px rgba(255, 180, 205, 0.45),
+    inset 0 2px 5px rgba(255, 255, 255, 0.95);
+  padding: 32px 42px 42px;
+  box-sizing: border-box;
+  animation: card-straighten 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Lazo satinado en esquina superior izquierda */
+.card-corner-bow {
+  position: absolute;
+  top: -34px;
+  left: -32px;
+  width: clamp(100px, 16vw, 145px);
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 18px rgba(180, 20, 70, 0.35));
+  animation: gentle-bob 4s ease-in-out infinite;
+}
+
+/* Ositos de peluche en esquina inferior izquierda */
+.card-character-left {
+  position: absolute;
+  bottom: -32px;
+  left: -85px;
+  width: clamp(180px, 32vw, 310px);
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 28px rgba(130, 20, 60, 0.3));
+  animation: float-gentle 5s ease-in-out infinite;
+}
+
+.card-character-left img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Regalo y rosa en esquina inferior derecha */
+.card-character-right {
+  position: absolute;
+  bottom: -28px;
+  right: -75px;
+  width: clamp(160px, 28vw, 275px);
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 28px rgba(130, 20, 60, 0.3));
+  animation: float-gentle 5s ease-in-out -2.5s infinite;
+}
+
+.card-character-right img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes gentle-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(1.5deg); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Torta 3D interactiva */
+.cake-3d-wrap {
+  position: relative;
+  width: clamp(180px, 26vw, 235px);
+  margin: -10px auto 8px;
+  cursor: pointer;
+  animation: cake-bob 4s ease-in-out infinite;
+  display: block;
+}
+
+.cake-3d-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 12px 20px rgba(180, 30, 80, 0.22));
+}
+
+/* Corazones flotantes alrededor de la torta */
+.cake-heart-choco {
+  position: absolute;
+  color: #E61E58;
+  filter: drop-shadow(0 3px 6px rgba(180, 20, 60, 0.45));
+  animation: twinkle 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.c-h1 { top: 16%; left: -6%; animation-delay: 0s; font-size: 20px; }
+.c-h2 { top: 36%; right: -8%; animation-delay: -0.8s; font-size: 18px; }
+.c-h3 { top: 6%; right: 12%; animation-delay: -1.6s; font-size: 14px; }
+.c-h4 { top: 10%; left: 14%; animation-delay: -1.2s; font-size: 15px; }
+
+/* Velas y llamas interactivas sobre la torta */
+.candle-flames-overlay {
+  position: absolute;
+  top: 14%;
+  left: 36%;
+  width: 28%;
+  height: 18%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.flame-spot {
+  position: relative;
+  width: 12px;
+  height: 22px;
+}
+
+.flame-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: radial-gradient(circle at 50% 70%, #FFFDF5 0 25%, #FFD642 45%, #FF4D4D 100%);
+  box-shadow: 0 0 16px 5px rgba(255, 170, 50, 0.85);
+  animation: flick 0.8s ease-in-out infinite;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.flame-smoke {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: rgba(120, 70, 70, 0.35);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.cake-3d-wrap.out .flame-glow {
+  opacity: 0;
+  transform: scale(0.1);
+  animation: none;
+}
+
+.cake-3d-wrap.out .flame-smoke {
+  animation: smoke 1.6s ease-out forwards;
+}
+
+/* Banner de cinta rosa */
+.ribbon-banner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px auto 14px;
+  padding: 7px 28px;
+  background: linear-gradient(180deg, #FF4586 0%, #D81358 100%);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: clamp(12px, 1.8vw, 14px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  box-shadow: 0 8px 18px rgba(216, 20, 90, 0.32);
+}
+
+.ribbon-tail {
+  position: absolute;
+  top: 4px;
+  width: 22px;
+  height: 100%;
+  background: linear-gradient(180deg, #E6286B 0%, #B80C46 100%);
+  z-index: -1;
+}
+
+.ribbon-tail.left {
+  left: -14px;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.ribbon-tail.right {
+  right: -14px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Título de bienvenida */
+.landing-title {
+  font-family: 'Gaegu', cursive;
+  font-size: clamp(38px, 5.5vw, 54px);
+  line-height: 1.1;
+  margin: 4px 0 10px;
+  color: #4A2B20;
+  font-weight: 700;
+}
+
+.title-sub {
+  color: #E81A63;
+  display: inline-block;
+}
+
+.doodle-heart {
+  display: inline-block;
+  color: #E81A63;
+  font-size: 0.95em;
+  transform: rotate(12deg);
+  animation: beat 1.8s ease-in-out infinite;
+}
+
+/* Insignia de tortita con rayos */
+.cake-badge-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 6px auto 12px;
+}
+
+.radiant-ray {
+  color: #E81A63;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.cake-sticker-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFDF9;
+  box-shadow: 0 4px 12px rgba(87, 56, 46, 0.15), 0 0 0 2px #FCE4EC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-cake-svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Texto de felicitación */
+.landing-copy {
+  max-width: 490px;
+  margin: 10px auto 0;
+  color: #57382E;
+  font-size: clamp(14px, 2.1vw, 16px);
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.highlight-pink {
+  color: #D8145C;
+  font-weight: 800;
+}
+
+/* Botón Deluxe 3D */
+.button-wrap-deluxe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.ray-accent {
+  color: #E81A63;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.button-deluxe {
+  height: 56px;
+  padding: 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #FF3D7F 0%, #D81358 100%);
+  color: #FFFFFF;
+  font-size: 18.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 12px 28px rgba(216, 20, 92, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.65),
+    inset 0 -3px 6px rgba(120, 0, 45, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.button-deluxe:hover {
+  transform: translateY(-2.5px) scale(1.02);
+  box-shadow: 0 16px 36px rgba(216, 20, 92, 0.55);
+}
+
+.button-deluxe:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.button-deluxe:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn-heart {
+  font-size: 1.15em;
+  color: #FFFFFF;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+/* Divisor inferior */
+.made-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+  margin: 24px auto 0;
+  position: relative;
+  z-index: 3;
+}
+
+.div-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232, 40, 106, 0.45), transparent);
+}
+
+.made-text {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #C0265A;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Ilustración de la Torta de Cumpleaños */
+.cake {
+  position: relative;
+  width: 260px;
+  height: 226px;
+  margin: 0 auto 16px;
+  animation: cake-bob 4s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.plate {
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  bottom: 0;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cream-deep);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 14px -8px rgba(87, 56, 46, 0.4);
+}
+
+.tier {
+  position: absolute;
+  border-radius: 12px;
+  border: 1px solid var(--envelope-edge);
+  overflow: visible;
+}
+
+.tier::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -1px;
+  height: 24px;
+  border-radius: 12px 12px 0 0;
+  background: var(--frost);
+  border: 1px solid var(--envelope-edge);
+  border-bottom: 0;
+}
+
+.tier::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22px;
+  height: 14px;
+  background: radial-gradient(circle at 12px 0, var(--frost) 11px, transparent 12px) 0 0 / 24px 14px repeat-x;
+}
+
+.tier.bottom {
+  left: 0;
+  width: 100%;
+  bottom: 12px;
+  height: 74px;
+  background: var(--envelope-front);
+  --frost: var(--secondary);
+}
+
+.tier.top {
+  left: 52px;
+  width: 156px;
+  bottom: 86px;
+  height: 60px;
+  background: var(--cream-deep);
+  --frost: var(--primary);
+}
+
+.sprinkles {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 16px;
+  height: 22px;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 10% 30%, var(--primary) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 30% 70%, var(--cream-deep) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 50% 25%, var(--primary-foreground) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 70% 65%, var(--primary) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 90% 30%, var(--cream-deep) 0 2.5px, transparent 3px);
+}
+
+.sprinkles.s2 {
+  left: 6px;
+  right: 6px;
+  bottom: 10px;
+  height: 18px;
+}
+
+.candles {
+  position: absolute;
+  left: 52px;
+  width: 156px;
+  bottom: 146px;
+  height: 56px;
+  z-index: 3;
+}
+
+.candle {
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 32px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(-45deg, var(--primary) 0 5px, var(--primary-foreground) 5px 10px);
+  border: 1px solid var(--envelope-edge);
+}
+
+.candle:nth-child(1) { left: 28px; height: 28px; }
+.candle:nth-child(2) { left: 74px; height: 36px; }
+.candle:nth-child(3) { left: 120px; height: 28px; }
+
+.flame {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 12px;
+  height: 19px;
+  margin: 0 0 3px -6px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 75%, #FFFFFF 0 25%, #FFE2A6 45%, #FF7676 100%);
+  box-shadow: 0 0 16px 5px rgba(255, 180, 80, 0.65);
+  transform-origin: 50% 100%;
+  animation: flick 0.9s ease-in-out infinite;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.candle:nth-child(2) .flame { animation-delay: -0.3s; }
+.candle:nth-child(3) .flame { animation-delay: -0.6s; }
+
+.candle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: rgba(87, 56, 46, 0.25);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.cake.out .flame {
+  opacity: 0;
+  transform: scale(0.1);
+  animation: none;
+}
+
+.cake.out .candle::after {
+  animation: smoke 1.6s ease-out forwards;
+}
+
+.spark-a, .spark-b, .spark-c {
+  position: absolute;
+  color: var(--envelope-edge);
+  font-size: 16px;
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+.spark-a { left: -14px; top: 38px; }
+.spark-b { right: -10px; top: 70px; animation-delay: -0.9s; }
+.spark-c { left: 20px; top: 6px; animation-delay: -1.7s; font-size: 12px; }
+
+/* ==========================================================================
+   2. SOBRE DE DESEOS & 3. CARTA DE CUMPLEAÑOS 💌 💗 (DELUXE)
+   ========================================================================== */
+.letter {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Encabezado del sobre y carta */
+.envelope-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  margin-bottom: 12px;
+}
+
+.env-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 50px;
+  height: 42px;
+  background: #FFFFFF;
+  border: 2px solid #F5A9BC;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(216, 20, 92, 0.22);
+  margin-bottom: 6px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.env-badge-mail {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.env-badge-heart {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 15px;
+  animation: beat 1.5s ease-in-out infinite;
+}
+
+.envelope-title {
+  font-family: 'Gaegu', cursive;
+  font-size: clamp(42px, 6vw, 64px);
+  line-height: 1.1;
+  margin: 4px 0 6px;
+  color: #6D1A2C;
+  font-weight: 800;
+  text-shadow:
+    0 1px 0 #FFFFFF,
+    0 2px 0 #FFE8EE,
+    0 4px 12px rgba(216, 20, 92, 0.2);
+}
+
+.envelope-banner {
+  margin: 6px auto 14px;
+}
+
+/* Escenario central */
+.letter-stage {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Pedestal con halo de luz circular en el suelo */
+.stage-pedestal {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(94vw, 880px);
+  height: 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pedestal-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 185, 210, 0.85);
+  box-shadow:
+    0 0 30px rgba(255, 90, 150, 0.55),
+    inset 0 0 36px rgba(255, 175, 210, 0.65);
+  background: radial-gradient(ellipse at center, rgba(255, 235, 243, 0.75) 0%, rgba(255, 180, 210, 0.28) 60%, transparent 80%);
+}
+
+/* Personaje izquierdo: Osito de peluche con rosas y corazón */
+.stage-char-left {
+  position: absolute;
+  left: -70px;
+  bottom: 0px;
+  width: clamp(170px, 22vw, 275px);
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 15px 22px rgba(87, 56, 46, 0.28));
+  animation: float-even 6s ease-in-out infinite;
+}
+
+.stage-char-left .char-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Personajes derechos: Caja de regalo / Sobre abierto con rosas */
+.stage-char-right {
+  position: absolute;
+  right: -70px;
+  bottom: 0px;
+  width: clamp(160px, 21vw, 260px);
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 15px 22px rgba(87, 56, 46, 0.28));
+  animation: float 6s ease-in-out infinite;
+}
+
+.stage-char-right .char-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Contenedor del Sobre 3D cerrado */
+.envelope-deluxe-wrap {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
+  animation: envelope-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.envelope-deluxe-btn {
+  position: relative;
+  background: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  display: block;
+  width: min(86vw, 540px);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.envelope-deluxe-btn:hover {
+  transform: scale(1.03) translateY(-4px);
+  filter: drop-shadow(0 20px 30px rgba(216, 20, 92, 0.35));
+}
+
+.envelope-deluxe-btn:active {
+  transform: scale(0.97) translateY(0);
+}
+
+.envelope-closed-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(120, 30, 60, 0.32));
+}
+
+/* Botón objetivo central del sello de cera */
+.central-wax-target {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  background: radial-gradient(circle, rgba(255, 50, 110, 0.45) 0%, rgba(220, 20, 80, 0.15) 60%, transparent 75%);
+  box-shadow: 0 0 20px rgba(255, 60, 130, 0.75), inset 0 0 10px rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.central-wax-target:hover {
+  transform: translate(-50%, -50%) scale(1.18);
+  box-shadow: 0 0 28px rgba(255, 20, 100, 0.95), inset 0 0 14px rgba(255, 255, 255, 0.85);
+}
+
+.wax-heart-pulse {
+  font-size: 26px;
+  line-height: 1;
+  display: block;
+  animation: beat 1.3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(120, 0, 30, 0.5));
+}
+
+/* Cápsula de instrucción inferior */
+.envelope-prompt-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 8px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px dashed #F5A3B7;
+  border-radius: 999px;
+  box-shadow:
+    0 6px 18px rgba(216, 20, 92, 0.2),
+    inset 0 1px 2px #FFFFFF;
+  color: #57382E;
+  font-size: clamp(13px, 1.8vw, 15px);
+  font-weight: 700;
+  z-index: 5;
+  letter-spacing: 0.01em;
+}
+
+.envelope-prompt-pill .pill-heart {
+  color: #E81A63;
+  font-size: 15px;
+  animation: beat 1.8s infinite;
+}
+
+/* Tarjeta desplegada de la carta (DELUXE) */
+.letter-paper-deluxe {
+  position: relative;
+  width: min(92vw, 680px);
+  background: #FFFDFC;
+  border-radius: 28px;
+  border: 2.5px dashed #F8B4C4;
+  padding: 30px 36px 32px;
+  box-shadow:
+    0 22px 50px rgba(180, 40, 80, 0.22),
+    0 6px 14px rgba(87, 56, 46, 0.08),
+    inset 0 0 0 8px #FFF9F7;
+  z-index: 3;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Gemas de corazón en las esquinas */
+.gem-heart {
+  position: absolute;
+  font-size: 16px;
+  color: #E81A63;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(216, 20, 92, 0.4));
+  animation: beat 2.2s ease-in-out infinite;
+}
+
+.gem-heart.g1 { top: 12px; left: 16px; }
+.gem-heart.g2 { top: 12px; right: 16px; }
+.gem-heart.g3 { bottom: 12px; left: 16px; }
+.gem-heart.g4 { bottom: 12px; right: 16px; }
+
+.letter-paper-deluxe .letter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid rgba(245, 180, 196, 0.6);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.avatar-deluxe {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FDE8ED;
+  border: 1.5px solid #F8B4C4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 8px rgba(232, 26, 99, 0.15);
+  flex-shrink: 0;
+}
+
+.from-title {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  color: #4A2B20;
+  font-family: 'Gaegu', cursive;
+}
+
+.from-sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #9A695B;
+  font-weight: 600;
+}
+
+.letter-gift-box {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 8px 12px rgba(87, 56, 46, 0.2));
+}
+
+.gift-box-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+
+.letter-paper-deluxe .letter-text {
+  max-width: 92%;
+  margin: 14px auto 0;
+  color: #4A2B20;
+  font-size: 15.5px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.letter-paper-deluxe .letter-text p {
+  margin: 0 0 14px;
+}
+
+.letter-closing,
+.letter-paper-deluxe .letter-closing {
+  text-align: center;
+  font-weight: 700;
+  color: #3E2016;
+  margin-top: 20px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.letter-para-wish,
+.letter-paper-deluxe .letter-para-wish {
+  text-align: center;
+}
+
+.continue-wrap-deluxe {
+  margin-top: 22px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: button-arrive 0.4s ease both;
+}
+
+.btn-icon {
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   SOBRE 3D ORIGINAL (IMAGEN 1 - ANTES DE ABRIR LA CARTA)
+   ========================================================================== */
+.envelope-wrap {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.envelope-button {
+  position: relative;
+  width: min(88vw, 420px);
+  aspect-ratio: 1.54 / 1;
+  background: none;
+  border: 0;
+  perspective: 1200px;
+  outline: 0;
+  cursor: pointer;
+  animation: envelope-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.25s ease;
+  z-index: 3;
+}
+
+.envelope-button:hover {
+  transform: scale(1.03) rotate(0deg) !important;
+}
+
+.envelope-button:active {
+  transform: scale(0.98) !important;
+}
+
+.envelope-shadow {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -6%;
+  height: 18%;
+  border-radius: 100%;
+  background: rgba(87, 56, 46, 0.25);
+  filter: blur(12px);
+}
+
+.envelope-paper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--envelope-edge);
+  border-radius: 10px;
+  box-shadow: var(--shadow-envelope);
+  background-color: var(--envelope-paper);
+  background-image:
+    radial-gradient(circle at 18% 23%, rgba(224, 133, 157, 0.16) 0 0.8px, transparent 1px),
+    radial-gradient(circle at 74% 68%, rgba(224, 133, 157, 0.12) 0 0.7px, transparent 1px);
+  background-size: 17px 19px, 23px 21px;
+}
+
+.envelope-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background: repeating-linear-gradient(115deg, transparent 0, transparent 8px, rgba(224, 133, 157, 0.12) 9px, transparent 10px);
+}
+
+.env-side {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 54%;
+  z-index: 1;
+}
+
+.env-left {
+  left: 0;
+  transform-origin: left;
+  background: var(--envelope-side);
+  border-right: 1px solid rgba(224, 133, 157, 0.5);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.env-right {
+  right: 0;
+  transform-origin: right;
+  background: var(--envelope-side-alt);
+  border-left: 1px solid rgba(224, 133, 157, 0.5);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.env-front {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  height: 58%;
+  border-top: 1px solid rgba(224, 133, 157, 0.6);
+  background: var(--envelope-front);
+  clip-path: polygon(0 100%, 0 18%, 50% 76%, 100% 18%, 100% 100%);
+}
+
+.env-line {
+  position: absolute;
+  z-index: 3;
+  left: 5%;
+  right: 5%;
+  bottom: 6%;
+  height: 1px;
+  background: rgba(224, 133, 157, 0.35);
+}
+
+.env-flap {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58%;
+  display: block;
+  transform-origin: top;
+  border: 1px solid var(--envelope-edge);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background-color: var(--envelope-paper);
+  background-image: linear-gradient(168deg, rgba(255, 255, 255, 0.4), transparent 52%, rgba(224, 133, 157, 0.2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 6px 9px -7px rgba(87, 56, 46, 0.45);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.envelope-button:hover .env-flap {
+  transform: rotateX(-9deg);
+}
+
+.seal {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 47%;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  transform: translateX(-50%);
+  border: 1px solid rgba(180, 50, 90, 0.8);
+  border-radius: 50%;
+  color: var(--primary-foreground);
+  box-shadow: var(--shadow-wax);
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.35), transparent 25%),
+    radial-gradient(circle at 52% 58%, var(--primary), #D64D7B 72%);
+  transition: transform 0.3s;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.envelope-button:hover .seal,
+.seal:hover {
+  transform: translateX(-50%) scale(1.12);
+}
+
+.with-love {
+  position: absolute;
+  z-index: 4;
+  bottom: 9%;
+  right: 7%;
+  font-family: 'Gaegu', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(87, 56, 46, 0.7);
+}
+
+.open-prompt {
+  margin: 28px 0 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  text-align: center;
+  width: 100%;
+}
+/* Tarjeta desplegada de la carta (como estaba originalmente) */
+.letter-paper {
+  position: relative;
+  width: 100%;
+  max-width: 672px;
+  padding: 28px 24px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-paper);
+  background: var(--card);
+  animation: letter-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.letter-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(243, 197, 205, 0.7);
+}
+
+.from {
+  display: flex;
+  min-width: 0;
+  gap: 14px;
+  align-items: center;
+}
+
+.avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--secondary);
+  font-size: 22px;
+  border: 1px solid var(--border);
+}
+
+.from b {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--brown-dark);
+}
+
+.from p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.gift-emoji {
+  font-size: 58px;
+  line-height: 1;
+  transform: rotate(6deg);
+  filter: drop-shadow(0 4px 6px rgba(87, 56, 46, 0.15));
+  animation: float 4s ease-in-out infinite;
+}
+
+.letter-text {
+  max-width: 600px;
+  margin-top: 22px;
+  color: var(--cocoa-soft);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+
+.letter-text p {
+  margin: 0 0 16px;
+}
+
+.sparkle {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 26px;
+  color: rgba(240, 120, 155, 0.3);
+}
+
+.continue-wrap {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  animation: button-arrive 0.35s 0.15s both;
+}
+
+/* ==========================================================================
+   4. REGALOS DE CUMPLEAÑOS 🎁
+   ========================================================================== */
+.cards {
+  padding-top: 36px;
+}
+
+.cards .section-head {
+  max-width: 680px;
+  margin: 0 auto 30px;
+}
+
+.grid {
+  display: grid;
+  width: 100%;
+  max-width: 580px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.flip {
+  grid-column: span 2;
+  min-width: 0;
+  aspect-ratio: 3 / 4;
+  perspective: 1200px;
+  animation: flip-enter 0.5s calc(var(--i) * 0.08s) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.flip:nth-child(3) {
+  grid-column: 2 / span 2;
+}
+
+.flip button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: none;
+  outline: 0;
+  cursor: pointer;
+}
+
+.flip button:focus-visible .flip-inner {
+  box-shadow: 0 0 0 3px var(--primary), var(--shadow-paper);
+}
+
+.flip-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  box-shadow: var(--shadow-paper);
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.45, 0.05, 0.2, 1), box-shadow 0.4s;
+}
+
+.flip.flipped .flip-inner {
+  transform: rotateY(180deg);
+  box-shadow: 0 22px 44px -16px rgba(232, 93, 141, 0.55);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.front {
+  background-color: var(--envelope-paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.front::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 12px;
+  border: 1.5px dashed rgba(224, 133, 157, 0.6);
+  pointer-events: none;
+}
+
+.label {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 10px 8px;
+  background: rgba(255, 252, 247, 0.95);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--brown-dark);
+  text-align: center;
+}
+
+.back {
+  background-color: var(--card);
+  transform: rotateY(180deg);
+}
+
+.back img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+  display: block;
+  background-color: #FFFDF9;
+}
+
+.back::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 13px;
+  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(224, 133, 157, 0.25);
+}
+
+/* Caja de regalo ilustrada en CSS */
+.gift {
+  position: relative;
+  width: 64%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 22px;
+  animation: gift-bob 3s ease-in-out infinite;
+}
+
+.flip:nth-child(even) .gift {
+  animation-delay: -1.2s;
+}
+
+.gbox {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 0;
+  height: 62%;
+  border-radius: 8px;
+  background: var(--g);
+  border: 1px solid var(--envelope-edge);
+}
+
+.glid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 18%;
+  height: 24%;
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--g) 88%, white);
+  background-color: #FCE6EC;
+  border: 1px solid var(--envelope-edge);
+  z-index: 2;
+}
+
+.gbox::after, .glid::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 16%;
+  margin-left: -8%;
+  background: var(--rb);
+  border-left: 1px solid var(--envelope-edge);
+  border-right: 1px solid var(--envelope-edge);
+}
+
+.bow {
+  position: absolute;
+  left: 50%;
+  top: 4%;
+  width: 36%;
+  height: 20%;
+  margin-left: -18%;
+  z-index: 3;
+}
+
+.bow::before, .bow::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 52%;
+  height: 100%;
+  border: 3px solid var(--rb);
+  border-radius: 50% 50% 50% 0;
+  background: transparent;
+}
+
+.bow::before {
+  left: -10%;
+  transform: rotate(-10deg);
+}
+
+.bow::after {
+  right: -10%;
+  transform: scaleX(-1) rotate(-10deg);
+}
+
+.fsp {
+  position: absolute;
+  color: var(--envelope-edge);
+  font-size: 14px;
+  animation: twinkle 2.4s ease-in-out infinite;
+  z-index: 3;
+}
+
+.fsp.a { left: 12%; top: 12%; }
+.fsp.b { right: 12%; top: 22%; animation-delay: -0.8s; font-size: 11px; }
+
+.cards-note {
+  margin: 28px 0 0;
+  text-align: center;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.cards .continue-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  animation: none;
+}
+
+/* ==========================================================================
+   5 & 6. PORTADA Y LIBRO INTERACTIVO DE RECUERDOS (DIARIO) 📖 📸
+   ========================================================================== */
+.diary {
+  justify-content: flex-start;
+}
+
+.book-stage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-shift {
+  width: min(92vw, 780px, calc((100vh - 280px) * 1.4));
+  width: min(92vw, 780px, calc((100dvh - 280px) * 1.4));
+  min-width: 280px;
+  margin-top: 10px;
+  transition: transform 1s cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.book-shift.closed {
+  transform: translateX(-25%);
+}
+
+.book {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.5 / 1;
+  perspective: 2400px;
+}
+
+/* Tapa trasera dura */
+.book-back {
+  position: absolute;
+  inset: -7px -8px -9px;
+  border-radius: 12px 20px 20px 12px;
+  background:
+    linear-gradient(90deg, transparent 49.4%, rgba(87, 56, 46, 0.3) 50%, transparent 50.6%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent 50%, rgba(87, 56, 46, 0.24)),
+    var(--primary);
+  border: 1px solid var(--envelope-edge);
+  box-shadow: 0 28px 42px -20px rgba(87, 56, 46, 0.55);
+  opacity: 1;
+  transition: opacity 0.7s;
+}
+
+.book.is-closed .book-back {
+  opacity: 0;
+}
+
+.book.is-closed .base,
+.book.is-closed .leaf:not([data-i="0"]) {
+  visibility: hidden;
+}
+
+.base, .leaf {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+}
+
+.base {
+  right: 0;
+  z-index: 0;
+  border-radius: 0 16px 16px 0;
+  box-shadow: 3px 0 0 var(--cream-deep), 6px 0 0 var(--border), 9px 0 0 var(--cream-deep);
+}
+
+.leaf {
+  left: 50%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 1.1s cubic-bezier(0.45, 0.05, 0.2, 1);
+  will-change: transform;
+}
+
+.leaf.flipped {
+  transform: rotateY(-180deg);
+}
+
+.pg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: var(--envelope-paper);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(10px, 3vw, 26px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pg.front {
+  border-radius: 0 16px 16px 0;
+}
+
+.pg.back {
+  transform: rotateY(180deg);
+  border-radius: 16px 0 0 16px;
+}
+
+.pg.front::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 14%;
+  background: linear-gradient(90deg, rgba(87, 56, 46, 0.15), transparent);
+  pointer-events: none;
+}
+
+.pg.back::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 14%;
+  background: linear-gradient(270deg, rgba(87, 56, 46, 0.15), transparent);
+  pointer-events: none;
+}
+
+/* Sombreado dinámico en giro de página */
+.pg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(90deg, rgba(87, 56, 46, 0.35), transparent 70%);
+}
+
+.pg.back::before {
+  background: linear-gradient(270deg, rgba(87, 56, 46, 0.35), transparent 70%);
+}
+
+.leaf.turning .pg::before {
+  animation: page-shade 1.1s ease-in-out;
+}
+
+/* Portada del libro */
+.pg.cover {
+  background-color: var(--primary);
+  background-image:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.24), transparent 45%, rgba(87, 56, 46, 0.24)),
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.18) 0 1px, transparent 1.5px);
+  background-size: auto, 22px 22px;
+  color: var(--primary-foreground);
+  border-color: var(--envelope-edge);
+  border-left: 8px solid rgba(180, 50, 90, 0.85);
+  box-shadow: 0 24px 34px -18px rgba(87, 56, 46, 0.55);
+}
+
+.cover-frame {
+  position: absolute;
+  inset: 10px 10px 10px 8px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.cover .big {
+  font-size: clamp(34px, 9vw, 66px);
+  line-height: 1;
+  animation: float 4s ease-in-out infinite;
+}
+
+.cover h2 {
+  margin: 6px 0 2px;
+  font-size: clamp(22px, 5.2vw, 40px);
+  line-height: 1;
+  color: #FFFFFF;
+}
+
+.cover small {
+  font-size: clamp(10px, 2.4vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.cover .tap {
+  margin-top: 12px;
+  font-size: clamp(10.5px, 2.2vw, 13.5px);
+  font-weight: 700;
+  animation: breathe 2.2s ease-in-out infinite;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.cover .cs {
+  position: absolute;
+  color: var(--primary-foreground);
+  opacity: 0.85;
+  font-size: clamp(12px, 3vw, 20px);
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+
+.cover .cs.a { left: 16%; top: 14%; }
+.cover .cs.b { right: 14%; top: 22%; animation-delay: -1s; }
+.cover .cs.c { left: 20%; bottom: 14%; animation-delay: -1.8s; }
+
+/* Páginas interiores del libro */
+.pg h3 {
+  margin: 0 0 6px;
+  font-size: clamp(18px, 4.4vw, 32px);
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.pg p {
+  margin: 0;
+  font-size: clamp(10.5px, 2.3vw, 16px);
+  line-height: 1.5;
+  color: var(--cocoa-soft);
+}
+
+.pg .orn {
+  font-size: clamp(14px, 3vw, 24px);
+  margin-bottom: 6px;
+}
+
+.pg .num {
+  position: absolute;
+  bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.pg .divider {
+  width: 44%;
+  height: 1px;
+  margin: clamp(6px, 1.6vw, 12px) 0;
+  background: rgba(224, 133, 157, 0.5);
+}
+
+.pg h3.sub {
+  font-size: clamp(15px, 3.4vw, 26px);
+}
+
+/* Marco estilo Polaroid para fotos */
+.photo-frame {
+  position: relative;
+  display: block;
+  width: 88%;
+  margin: 0;
+  background: #FFFDF9;
+  padding: 6px 6px 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 18px -10px rgba(87, 56, 46, 0.45);
+  transform: rotate(-2deg);
+}
+
+.photo-frame.alt {
+  transform: rotate(2deg);
+}
+
+.photo-frame::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  width: 36%;
+  height: 17px;
+  margin-left: -18%;
+  background: rgba(248, 226, 204, 0.85);
+  border: 1px solid rgba(224, 133, 157, 0.35);
+  transform: rotate(-3deg);
+  z-index: 2;
+}
+
+.photo-frame .slot {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.photo-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  font-family: 'Gaegu', cursive;
+  font-size: clamp(12px, 2.7vw, 17px);
+  font-weight: 700;
+  color: var(--cocoa-soft);
+  text-align: center;
+}
+
+.diary .continue-wrap {
+  margin-top: 24px;
+  animation: none;
+}
+
+.diary-hint {
+  margin: 16px 0 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* ==========================================================================
+   7 & 8. MENSAJE FINAL ROMÁNTICO ❤️
+   ========================================================================== */
+.screen.finale {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 48px 16px 14px;
+}
+
+.finale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(240, 120, 155, 0.25), transparent 55%),
+    radial-gradient(circle at 12% 88%, rgba(249, 215, 217, 0.75), transparent 45%),
+    radial-gradient(circle at 90% 72%, rgba(248, 226, 204, 0.75), transparent 45%);
+}
+
+#finale-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.finale .garland {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  height: 42px;
+}
+
+.finale .garland i {
+  height: 24px;
+}
+
+.finale-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heart-stage {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 6px;
+  display: grid;
+  place-items: center;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(240, 120, 155, 0.5);
+  animation: ring 2.8s ease-out infinite;
+}
+
+.ring.r2 {
+  animation-delay: -1.4s;
+}
+
+.orbit {
+  position: absolute;
+  inset: -8px;
+  animation: spin 10s linear infinite;
+}
+
+.orbit i {
+  position: absolute;
+  font-style: normal;
+  color: var(--envelope-edge);
+  font-size: 10px;
+}
+
+.orbit i:nth-child(1) { left: 50%; top: -3px; }
+.orbit i:nth-child(2) { right: -3px; top: 58%; font-size: 9px; }
+.orbit i:nth-child(3) { left: 3px; top: 70%; font-size: 9px; }
+
+.glow-heart {
+  position: relative;
+  width: 40px;
+  color: var(--primary);
+  animation: beat 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(240, 120, 155, 0.7));
+}
+
+.finale-title {
+  font-size: clamp(32px, 6.6vh, 58px);
+  line-height: 1.05;
+  margin: 4px 0 clamp(10px, 2vh, 18px);
+  color: var(--brown-dark);
+}
+
+.finale-title em {
+  font-style: normal;
+  color: var(--primary);
+  position: relative;
+  display: inline-block;
+}
+
+.finale-title em::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -6px;
+  height: 7px;
+  background: radial-gradient(circle at 7px 0, transparent 5px, var(--envelope-edge) 5.5px 7px, transparent 7.5px) 0 0 / 14px 7px repeat-x;
+  opacity: 0.75;
+}
+
+.finale-paper {
+  position: relative;
+  width: 100%;
+  padding: clamp(18px, 3.2vh, 34px) clamp(18px, 4vw, 36px) clamp(14px, 2.4vh, 26px);
+  border-radius: 24px;
+  background-color: rgba(255, 252, 247, 0.96);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-paper);
+}
+
+.finale-paper::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: -1px;
+  height: 6px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, var(--primary), var(--envelope-front), var(--cream-deep), var(--envelope-front), var(--primary));
+}
+
+.finale-paper::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 16px;
+  pointer-events: none;
+  border: 1.5px dashed rgba(224, 133, 157, 0.45);
+}
+
+.finale-paper .line {
+  position: relative;
+  margin: 0 0 clamp(5px, 1.1vh, 11px);
+  font-size: clamp(13.5px, 2.1vh, 17px);
+  line-height: 1.5;
+  color: var(--cocoa-soft);
+}
+
+.finale-paper .line.big {
+  font-family: 'Gaegu', cursive;
+  font-size: clamp(26px, 4.4vh, 40px);
+  line-height: 1.05;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.finale-paper .line.sign {
+  font-family: 'Gaegu', cursive;
+  font-size: clamp(22px, 3.6vh, 32px);
+  color: var(--foreground);
+  font-weight: 700;
+  margin: clamp(6px, 1.4vh, 14px) 0 0;
+}
+
+.finale-paper .corner {
+  position: absolute;
+  color: var(--envelope-edge);
+  font-size: 16px;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.finale-paper .corner.tl { left: 18px; top: 18px; }
+.finale-paper .corner.br { right: 18px; bottom: 18px; animation-delay: -1.5s; }
+
+.finale .again {
+  margin-top: clamp(14px, 2.4vh, 22px);
+  height: clamp(44px, 6vh, 52px);
+}

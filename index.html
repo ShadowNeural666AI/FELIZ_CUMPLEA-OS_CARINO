@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Una celebración de cumpleaños hecha con todo el amor: deseos, un diario de recuerdos y sorpresas mágicas." />
+  <title>¡Feliz cumpleaños, cariño! 🎂💗</title>
+
+  <!-- Google Fonts con precarga para rendimiento óptimo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Hojas de estilos modulares -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+  <!-- Botón interactivo de sonido/música ambiental -->
+  <button id="audio-toggle" class="audio-ctrl" type="button" aria-label="Silenciar efectos de sonido"
+    title="Sonido romántico interactivo">
+    🔔
+  </button>
+
+  <main class="site">
+    <!-- Elementos decorativos flotantes de fondo -->
+    <div class="decor" aria-hidden="true">
+      <span class="f" style="left: 7%; top: 8%; --dur: 5s; --delay: 0s">♡</span>
+      <span class="f" style="left: 20%; top: 31%; --dur: 6s; --delay: 0.35s">✦</span>
+      <span class="f" style="left: 33%; top: 54%; --dur: 7s; --delay: 0.7s">☁</span>
+      <span class="f" style="left: 46%; top: 77%; --dur: 5s; --delay: 1.05s">♡</span>
+      <span class="f" style="left: 59%; top: 18%; --dur: 6s; --delay: 1.4s">✧</span>
+      <span class="f" style="left: 72%; top: 41%; --dur: 7s; --delay: 1.75s">☁</span>
+      <span class="f" style="left: 85%; top: 64%; --dur: 5s; --delay: 2.1s">♡</span>
+      <span class="f" style="left: 10%; top: 87%; --dur: 6s; --delay: 2.45s">✦</span>
+
+      <!-- Estrellas parpadeantes -->
+      <span class="tw" style="left: 14%; top: 20%; --dur: 3.2s; --delay: 0s">✦</span>
+      <span class="tw" style="left: 90%; top: 12%; --dur: 3.8s; --delay: -1s">✧</span>
+      <span class="tw" style="left: 52%; top: 6%; --dur: 4.2s; --delay: -2s">✦</span>
+      <span class="tw" style="left: 4%; top: 58%; --dur: 3.5s; --delay: -0.6s">✧</span>
+      <span class="tw" style="left: 94%; top: 82%; --dur: 4s; --delay: -1.6s">✦</span>
+      <span class="tw" style="left: 66%; top: 92%; --dur: 3.4s; --delay: -2.4s">✧</span>
+
+      <!-- Corazones ascendentes continuos -->
+      <span class="rise" style="left: 8%; --dur: 17s; --delay: 0s; --s: 16px">♥</span>
+      <span class="rise" style="left: 24%; --dur: 21s; --delay: -6s; --s: 22px">♡</span>
+      <span class="rise" style="left: 42%; --dur: 18s; --delay: -11s; --s: 14px">♥</span>
+      <span class="rise" style="left: 61%; --dur: 23s; --delay: -3s; --s: 20px">♡</span>
+      <span class="rise" style="left: 78%; --dur: 19s; --delay: -9s; --s: 16px">♥</span>
+      <span class="rise" style="left: 92%; --dur: 22s; --delay: -14s; --s: 18px">♡</span>
+    </div>
+
+    <!-- Canvas para efectos dinámicos de confeti -->
+    <canvas id="fx" aria-hidden="true"></canvas>
+
+    <!-- ===================================================================
+           1. TARJETA DE BIENVENIDA (LANDING) 🎂
+           =================================================================== -->
+    <section class="screen landing active" id="step1">
+      <!-- Globos 3D de corazón flotantes en el fondo -->
+      <div class="heart-balloon-wrap balloon-left" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+      <div class="heart-balloon-wrap balloon-right" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+      <div class="heart-balloon-wrap balloon-side-left" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+      <div class="heart-balloon-wrap balloon-side-right" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+
+      <!-- Tarjeta Romántica Central -->
+      <div class="landing-card romantic-card">
+        <!-- Lazo satinado en esquina superior izquierda -->
+        <img src="assets/images/ribbon_bow.png" alt="" class="card-corner-bow" aria-hidden="true" />
+
+        <!-- Ositos de peluche con rosas en esquina inferior izquierda -->
+        <div class="card-character-left" aria-hidden="true">
+          <img src="assets/images/teddy_bears.png" alt="Ositos abrazados con corazón y rosas" />
+        </div>
+
+        <!-- Caja de regalo y rosa roja en esquina inferior derecha -->
+        <div class="card-character-right" aria-hidden="true">
+          <img src="assets/images/gift_box_rose.png" alt="Caja de regalo y rosa de cumpleaños" />
+        </div>
+
+        <div class="landing-content">
+          <!-- Torta 3D interactiva con 3 velas y llamas animadas -->
+          <div class="cake-3d-wrap" id="cake" role="button" tabindex="0"
+            aria-label="Torta de cumpleaños con tres velas encendidas. Toca para apagar.">
+            <!-- Corazones de chocolate flotantes -->
+            <span class="cake-heart-choco c-h1" aria-hidden="true">♥</span>
+            <span class="cake-heart-choco c-h2" aria-hidden="true">♥</span>
+            <span class="cake-heart-choco c-h3" aria-hidden="true">♥</span>
+            <span class="cake-heart-choco c-h4" aria-hidden="true">♥</span>
+
+            <img src="assets/images/cake_3d.png" alt="Torta de cumpleaños 3D" class="cake-3d-img" />
+
+            <!-- Velas con llamas interactivas sobre la torta -->
+            <div class="candle-flames-overlay" aria-hidden="true">
+              <span class="flame-spot f1">
+                <span class="flame-glow"></span>
+                <span class="flame-smoke"></span>
+              </span>
+              <span class="flame-spot f2">
+                <span class="flame-glow"></span>
+                <span class="flame-smoke"></span>
+              </span>
+              <span class="flame-spot f3">
+                <span class="flame-glow"></span>
+                <span class="flame-smoke"></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Banner cinta rosa superior -->
+          <div class="ribbon-banner">
+            <span class="ribbon-tail left" aria-hidden="true"></span>
+            <span class="ribbon-text">♥ UN DÍA HECHO SOLO PARA TI ♥</span>
+            <span class="ribbon-tail right" aria-hidden="true"></span>
+          </div>
+
+          <!-- Título principal -->
+          <h1 class="landing-title">
+            ¡Feliz cumpleaños,<br />
+            <span class="title-sub">cariño! <span class="doodle-heart">♡</span></span>
+          </h1>
+
+          <!-- Texto de felicitación -->
+          <p class="landing-copy">
+            He preparado una pequeña celebración solo para ti, con
+            <strong class="highlight-pink">deseos</strong>, un diario de
+            <strong class="highlight-pink">recuerdos</strong> y algunas
+            <strong class="highlight-pink">sorpresas</strong>.<br />
+            Cierra los ojos, pide un deseo y apaga las velas. 🎈
+          </p>
+
+          <!-- Botón 3D Deluxe -->
+          <div class="button-wrap-deluxe">
+            <span class="ray-accent left" aria-hidden="true">\\</span>
+            <button class="button-deluxe breathe" id="wish-btn" type="button">
+              Pide un deseo <span class="btn-heart">♥</span>
+            </button>
+            <span class="ray-accent right" aria-hidden="true">//</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Línea inferior decorativa -->
+      <div class="made-divider">
+        <span class="div-line"></span>
+        <p class="made-text">♥ Hecho con todo mi amor, solo para ti ♥</p>
+        <span class="div-line"></span>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+           2. SOBRE DE DESEOS & 3. CARTA DE CUMPLEAÑOS 💌 💗
+           =================================================================== -->
+    <section class="screen letter" id="step2">
+      <!-- Globos 3D de corazón flotantes en el fondo -->
+      <div class="heart-balloon-wrap balloon-left" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+      <div class="heart-balloon-wrap balloon-right" aria-hidden="true">
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+
+      <!-- Globos 3D de corazón flotantes en el fondo (visibles en estado deluxe) -->
+      <div class="heart-balloon-wrap balloon-left" id="balloon-left" aria-hidden="true" hidden>
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+      <div class="heart-balloon-wrap balloon-right" id="balloon-right" aria-hidden="true" hidden>
+        <img src="assets/images/heart_balloon.png" alt="" class="balloon-img" />
+      </div>
+
+      <!-- ENCABEZADO 1: Antes de abrir la carta (IMAGEN 1 - COMO ESTABA) -->
+      <header class="section-head" id="envelope-head">
+        <h1 class="hand">Deseos 💌 de cumpleaños</h1>
+        <p>Una pequeña nota, envuelta en amor.</p>
+      </header>
+
+      <!-- ENCABEZADO 2: Después de abrir la carta (DELUXE - IMAGEN 4) -->
+      <header class="section-head envelope-head" id="letter-head" hidden>
+        <div class="env-icon-badge" aria-hidden="true">
+          <span class="env-badge-mail">✉️</span>
+          <span class="env-badge-heart">❤️</span>
+        </div>
+        <h1 class="envelope-title">Deseos de cumpleaños</h1>
+        <div class="ribbon-banner envelope-banner">
+          <span class="ribbon-tail left" aria-hidden="true"></span>
+          <span class="ribbon-text">♥ Una pequeña nota, envuelta en amor. ♥</span>
+          <span class="ribbon-tail right" aria-hidden="true"></span>
+        </div>
+      </header>
+
+      <div class="letter-stage">
+        <!-- Personaje Izquierda: Osito de peluche con rosas y corazón (visible después de abrir la carta) -->
+        <div class="stage-char-left" id="stage-char-left" aria-hidden="true" hidden>
+          <img src="assets/images/teddy_bears.png" alt="Osito feliz con corazón y rosas" class="char-img" />
+        </div>
+
+        <!-- Personaje Derecha: Sobre abierto con corona de rosas (visible después de abrir la carta) -->
+        <div class="stage-char-right stage-char-opened-env" id="stage-right-env" aria-hidden="true" hidden>
+          <img src="assets/images/envelope_roses.png" alt="Sobre de carta abierto con rosas rojas" class="char-img" />
+        </div>
+
+        <!-- Pedestal con halo de luz en el piso (visible después de abrir la carta) -->
+        <div class="stage-pedestal" id="stage-pedestal" aria-hidden="true" hidden>
+          <span class="pedestal-ring"></span>
+        </div>
+
+        <!-- CONTENIDO 1: Sobre 3D original (IMAGEN 1 - ANTES DE ABRIR LA CARTA) -->
+        <div class="envelope-wrap" id="envelope-wrap">
+          <button type="button" class="envelope-button" id="envelope"
+            aria-label="Toca el sobre para abrir tu carta de cumpleaños">
+            <span class="envelope-shadow"></span>
+            <span class="envelope-paper">
+              <span class="env-side env-left"></span>
+              <span class="env-side env-right"></span>
+              <span class="env-front"></span>
+              <span class="env-line"></span>
+            </span>
+            <span class="env-flap"></span>
+            <span class="seal" id="wax-seal" title="Toca aquí para abrir">🎂</span>
+            <span class="with-love">Feliz Cumpleaños</span>
+          </button>
+
+          <p class="open-prompt" id="open-prompt">Toca el sobre para abrir tu carta de cumpleaños.</p>
+        </div>
+
+        <!-- CONTENIDO 2: Carta de cumpleaños desplegada (DELUXE - IMAGEN 4) -->
+        <article class="letter-paper-deluxe paper" id="opened-letter" hidden>
+          <!-- Gemas de corazón en las esquinas -->
+          <span class="gem-heart g1" aria-hidden="true">♥</span>
+          <span class="gem-heart g2" aria-hidden="true">♥</span>
+
+          <div class="letter-top">
+            <div class="from">
+              <span class="avatar-deluxe">🎀</span>
+              <div>
+                <b class="from-title">Mi amor</b>
+                <p class="from-sub">Abre esto en tu día especial.</p>
+              </div>
+            </div>
+
+            <!-- Caja de regalo 3D roja con lazo dorado en la esquina superior derecha -->
+            <div class="letter-gift-box" aria-hidden="true">
+              <img src="assets/images/gift_box_gold.png" alt="Regalo" class="gift-box-img" />
+            </div>
+          </div>
+
+          <div class="letter-text">
+            <p>Mi queridísima querida,</p>
+            <p>¡Feliz cumpleaños! Hoy todo el mundo puede celebrar el día en que llegaste, y yo celebro la alegría que
+              traes a cada día después de él.</p>
+            <p class="letter-para-wish">Que este año te envuelva en risas, florezca con nuevas aventuras y te traiga todos los deseos que jamás
+              has susurrado sobre una vela. Te mereces toda la dulzura que la vida tiene para ofrecer.</p>
+            <p>Gracias por ser tú: cálida, maravillosa y mi parte favorita de cada día.</p>
+            <p class="letter-closing">Con todo mi amor,<br />tuyo, siempre ❤️</p>
+          </div>
+        </article>
+
+        <!-- Botón de avance hacia los regalos (DELUXE - IMAGEN 4) -->
+        <div class="continue-wrap-deluxe" id="letter-next" hidden>
+          <button class="button-deluxe breathe" data-next="3" type="button">
+            <span class="btn-icon">🎁</span>
+            Desenvuelve tus regalos
+            <span class="btn-icon">🎁</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+           4. REGALOS DE CUMPLEAÑOS 🎁
+           =================================================================== -->
+    <section class="screen cards" id="step3">
+      <header class="section-head">
+        <h1 class="hand">Regalos de cumpleaños para ti 🎁</h1>
+        <p>¡Toca cada regalo para abrir una sorpresa!</p>
+      </header>
+
+      <div class="grid">
+        <!-- Regalo 1: Hello Kitty con ramo de rosas rojas -->
+        <div class="flip" style="--i: 0">
+          <button type="button" aria-label="Abrir regalo 1: Una sorpresa especial">
+            <span class="flip-inner">
+              <span class="face front">
+                <span class="fsp a" aria-hidden="true">✦</span>
+                <span class="fsp b" aria-hidden="true">✧</span>
+                <span class="gift" style="--g: var(--primary); --rb: var(--cream-deep)">
+                  <span class="bow"></span>
+                  <span class="glid"></span>
+                  <span class="gbox"></span>
+                </span>
+                <span class="label">Una sorpresa especial 💗</span>
+              </span>
+              <span class="face back">
+                <img src="assets/images/gift1.png" alt="Hello Kitty con ramo de rosas rojas" decoding="async" />
+              </span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Regalo 2: Hello Kitty con corazón Love -->
+        <div class="flip" style="--i: 1">
+          <button type="button" aria-label="Abrir regalo 2: Un dulce detalle">
+            <span class="flip-inner">
+              <span class="face front">
+                <span class="fsp a" aria-hidden="true">✧</span>
+                <span class="fsp b" aria-hidden="true">✦</span>
+                <span class="gift" style="--g: var(--envelope-front); --rb: var(--primary)">
+                  <span class="bow"></span>
+                  <span class="glid"></span>
+                  <span class="gbox"></span>
+                </span>
+                <span class="label">Un dulce detalle ❤️</span>
+              </span>
+              <span class="face back">
+                <img src="assets/images/gift2.png" alt="Hello Kitty sosteniendo un corazón de amor" decoding="async" />
+              </span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Regalo 3: Hello Kitty con canasta de dulces y regalos -->
+        <div class="flip" style="--i: 2">
+          <button type="button" aria-label="Abrir regalo 3: Una pequeña sorpresa">
+            <span class="flip-inner">
+              <span class="face front">
+                <span class="fsp a" aria-hidden="true">✦</span>
+                <span class="fsp b" aria-hidden="true">✧</span>
+                <span class="gift" style="--g: var(--cream-deep); --rb: var(--primary)">
+                  <span class="bow"></span>
+                  <span class="glid"></span>
+                  <span class="gbox"></span>
+                </span>
+                <span class="label">Una pequeña sorpresa 🎀</span>
+              </span>
+              <span class="face back">
+                <img src="assets/images/gift3.png" alt="Hello Kitty con sorpresas, peluche y chocolates"
+                  decoding="async" />
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <p class="cards-note">Empieza tocando cualquier regalo de arriba 💗</p>
+
+      <div class="continue-wrap">
+        <button class="button" data-next="4" type="button">
+          Abre tu diario de cumpleaños 📖
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" />
+            <path d="M8 7h7" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+           5 & 6. PORTADA Y LIBRO INTERACTIVO DE RECUERDOS (DIARIO) 📖 📸
+           =================================================================== -->
+    <section class="screen diary" id="step4">
+      <header class="section-head">
+        <h1 class="hand">Tu diario 📖 de cumpleaños</h1>
+        <p>Toca la cubierta para abrirla y luego toca las páginas para darles la vuelta.</p>
+      </header>
+
+      <div class="book-stage">
+        <div class="book-shift closed" id="book-shift">
+          <div class="book is-closed" id="book">
+            <div class="book-back" aria-hidden="true"></div>
+
+            <!-- Última página derecha fija (base revelada al voltear todas las hojas) -->
+            <div class="base">
+              <div class="pg front paper-grain">
+                <div class="orn">✨</div>
+                <h3 class="hand">Mi promesa</h3>
+                <p>Prometo seguir celebrándote, no solo hoy sino todos los días, con paciencia, con risas y con todo el
+                  amor que tengo.</p>
+                <span class="divider"></span>
+                <h3 class="hand sub">¡Feliz cumpleaños! 🎉</h3>
+                <p>Desde el 22 de noviembre, el mundo ha sido un poco más brillante. Por ti, por nosotros y por un año
+                  lleno de cosas maravillosas.</p>
+                <span class="num">8</span>
+              </div>
+            </div>
+
+            <!-- Hoja 0: Portada exterior y Página 1 interior -->
+            <div class="leaf" data-i="0">
+              <div class="pg front cover paper-grain" id="cover-face" role="button" tabindex="0"
+                aria-label="Toca la portada para abrir el diario">
+                <span class="cover-frame"></span>
+                <span class="cs a" aria-hidden="true">✦</span>
+                <span class="cs b" aria-hidden="true">✧</span>
+                <span class="cs c" aria-hidden="true">✦</span>
+                <div class="big">🎂</div>
+                <small>EL DIARIO DE CUMPLEAÑOS DE</small>
+                <h2 class="hand">Cariño</h2>
+                <span class="tap">Toca para abrir ✨</span>
+              </div>
+              <div class="pg back paper-grain">
+                <figure class="photo-frame">
+                  <span class="slot">
+                    <img src="assets/images/page1.png" alt="Fotografía de recuerdos 1" width="800" height="800"
+                      decoding="async" />
+                  </span>
+                  <figcaption class="photo-cap">Mi sonrisa favorita</figcaption>
+                </figure>
+                <span class="num">1</span>
+              </div>
+            </div>
+
+            <!-- Hoja 1: Página 2 (Deseo) y Página 3 (Foto) -->
+            <div class="leaf" data-i="1">
+              <div class="pg front paper-grain">
+                <div class="orn">🎈</div>
+                <h3 class="hand">Deseo de cumpleaños</h3>
+                <p>Que tu día brille más que cada vela de tu tarta, y que tu corazón siga siendo tan ligero como un
+                  globo flotando hacia el cielo.</p>
+                <span class="num">2</span>
+              </div>
+              <div class="pg back paper-grain">
+                <figure class="photo-frame alt">
+                  <span class="slot">
+                    <img src="assets/images/page2.jpg" alt="Fotografía de recuerdos 2" width="800" height="800"
+                      decoding="async" />
+                  </span>
+                  <figcaption class="photo-cap">Pura luz de sol</figcaption>
+                </figure>
+                <span class="num">3</span>
+              </div>
+            </div>
+
+            <!-- Hoja 2: Página 4 (Mensaje) y Página 5 (Foto) -->
+            <div class="leaf" data-i="2">
+              <div class="pg front paper-grain">
+                <div class="orn">💌</div>
+                <h3 class="hand">Un pequeño mensaje</h3>
+                <p>Convierte momentos ordinarios en tesoros. Gracias por cada risa, cada abrazo silencioso y cada vez
+                  que hiciste que el mundo se sintiera más suave.</p>
+                <span class="num">4</span>
+              </div>
+              <div class="pg back paper-grain">
+                <figure class="photo-frame">
+                  <span class="slot">
+                    <img src="assets/images/page3.jpg" alt="Fotografía de recuerdos 3" width="800" height="800"
+                      decoding="async" />
+                  </span>
+                  <figcaption class="photo-cap">Un recuerdo para siempre</figcaption>
+                </figure>
+                <span class="num">5</span>
+              </div>
+            </div>
+
+            <!-- Hoja 3: Página 6 (Recuerdos) y Página 7 (Foto) -->
+            <div class="leaf" data-i="3">
+              <div class="pg front paper-grain">
+                <div class="orn">🌸</div>
+                <h3 class="hand">Dulces recuerdos</h3>
+                <p>Algunos de mis recuerdos más felices son simplemente los días que he pasado contigo. Que este año
+                  añada mil más, cada uno más dulce que el anterior.</p>
+                <span class="num">6</span>
+              </div>
+              <div class="pg back paper-grain">
+                <figure class="photo-frame alt">
+                  <span class="slot">
+                    <img src="assets/images/page4.jpg" alt="Fotografía de recuerdos 4" width="800" height="800"
+                      decoding="async" />
+                  </span>
+                  <figcaption class="photo-cap">Todo mi corazón</figcaption>
+                </figure>
+                <span class="num">7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="diary-hint">Toca la página derecha para girar hacia adelante, la página izquierda para ir hacia atrás
+          🌸</p>
+
+        <div class="continue-wrap">
+          <button class="button" data-next="5" type="button">
+            Una última sorpresa ♥
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor"
+                d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.51z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+           7 & 8. MENSAJE FINAL ROMÁNTICO ❤️
+           =================================================================== -->
+    <section class="screen finale" id="step5">
+      <!-- Canvas dedicado para lluvia suave de corazones y chispas -->
+      <canvas id="finale-canvas" aria-hidden="true"></canvas>
+
+      <!-- Guirnalda festiva superior -->
+      <div class="bunting garland" aria-hidden="true">
+        <i style="--c: var(--primary); --dl: 0s"></i>
+        <i style="--c: var(--cream-deep); --dl: -0.4s"></i>
+        <i style="--c: var(--envelope-front); --dl: -0.8s"></i>
+        <i style="--c: var(--secondary); --dl: -1.2s"></i>
+        <i style="--c: var(--primary); --dl: -1.6s"></i>
+        <i style="--c: var(--cream-deep); --dl: -2s"></i>
+        <i style="--c: var(--envelope-front); --dl: -2.4s"></i>
+        <i style="--c: var(--secondary); --dl: -2.8s"></i>
+        <i style="--c: var(--primary); --dl: -3.2s"></i>
+        <i style="--c: var(--cream-deep); --dl: -3.6s"></i>
+      </div>
+
+      <div class="finale-inner">
+        <!-- Corazón central palpitante con anillos luminosos y órbita de destellos -->
+        <div class="heart-stage rise-in" style="--i: 0" aria-hidden="true">
+          <span class="ring"></span>
+          <span class="ring r2"></span>
+          <span class="orbit"><i>✦</i><i>✧</i><i>✦</i></span>
+          <svg class="glow-heart" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.51z" />
+          </svg>
+        </div>
+
+        <h1 class="hand finale-title rise-in" style="--i: 1">
+          Feliz cumpleaños,<br /><em>mi amor</em> ❤️
+        </h1>
+
+        <!-- Tarjeta central de dedicatoria romántica -->
+        <div class="finale-paper paper paper-grain rise-in" style="--i: 2">
+          <span class="corner tl" aria-hidden="true">✦</span>
+          <span class="corner br" aria-hidden="true">✧</span>
+
+          <p class="line big rise-in" style="--i: 3">Cariño,</p>
+          <p class="line rise-in" style="--i: 4">
+            En este hermoso día, 22 de noviembre, el mundo se volvió un poco más especial, y celebro el amor con el que
+            lo llenas.
+          </p>
+          <p class="line rise-in" style="--i: 5">
+            Eres mi calma, mi risa, mi favorito de todo.
+          </p>
+          <p class="line rise-in" style="--i: 6">
+            Ninguna vela, ningún deseo y ninguna estrella podría brillar tan intensamente como tú.
+          </p>
+          <p class="line rise-in" style="--i: 7">
+            Te amaré en cada año que aún esté por venir.
+          </p>
+          <p class="line sign rise-in" style="--i: 8">
+            Para siempre tuyo 💗
+          </p>
+        </div>
+
+        <!-- Botón de repetición del recorrido -->
+        <button class="button again rise-in" style="--i: 9" id="replay" type="button">
+          Celebra de nuevo 🎂
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts modulares en orden de dependencia -->
+  <script src="js/particles.js"></script>
+  <script src="js/envelope.js"></script>
+  <script src="js/gifts.js"></script>
+  <script src="js/diary.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

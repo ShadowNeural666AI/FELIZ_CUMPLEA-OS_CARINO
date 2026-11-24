@@ -1,0 +1,324 @@
+/* ==========================================================================
+   CUMPLE - ANIMATIONS.CSS
+   Definición de fotogramas clave y animaciones avanzadas
+   ========================================================================== */
+
+/* Flotación suave y oscilación */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+
+@keyframes float-even {
+  0%, 100% {
+    transform: translateY(0) rotate(4deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-4deg);
+  }
+}
+
+/* Parpadeo de estrellas y destellos */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.6) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(25deg);
+  }
+}
+
+/* Ascenso de corazones de fondo */
+@keyframes rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(16px, -55vh, 0) scale(1.05);
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(-12px, -112vh, 0) scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* Transición de entrada de pantallas */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Latido / respiración de botones y elementos clave */
+.breathe {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: var(--shadow-romantic);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 16px 36px -8px rgba(240, 120, 155, 0.65);
+    transform: scale(1.02);
+  }
+}
+
+/* Movimiento de los globos */
+@keyframes balloon {
+  0%, 100% {
+    transform: translateY(0) rotate(-3.5deg);
+  }
+  50% {
+    transform: translateY(-24px) rotate(3.5deg);
+  }
+}
+
+/* Alineación sutil de la tarjeta de inicio */
+@keyframes card-straighten {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotate(-1.5deg) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+/* Ondeo de los banderines */
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+/* Suave balanceo de la torta */
+@keyframes cake-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Parpadeo de la llama de las velas */
+@keyframes flick {
+  0%, 100% {
+    transform: scale(1, 1) rotate(-3deg);
+  }
+  50% {
+    transform: scale(0.9, 1.15) rotate(3deg);
+  }
+}
+
+/* Humo al soplar las velas */
+@keyframes smoke {
+  0% {
+    opacity: 0.75;
+    transform: translateY(0) scale(0.6);
+  }
+  50% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-42px) scale(2.4);
+  }
+}
+
+/* Entrada del sobre */
+@keyframes envelope-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotate(-1.5deg) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-1deg) scale(1);
+  }
+}
+
+/* Salida del sobre al abrirse */
+@keyframes envelope-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(45px) scale(0.92);
+  }
+}
+
+/* Ráfaga 3D de apertura del sobre de lujo */
+@keyframes envelope-open-burst {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+  35% {
+    opacity: 0.95;
+    transform: scale(1.09) translateY(-14px) rotate(-1.5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.75) translateY(45px) rotate(3deg);
+  }
+}
+
+/* Despliegue de la carta de cumpleaños */
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(45px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Despliegue 3D suave de la carta de cumpleaños deluxe */
+@keyframes letter-unfold-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(35px) rotateX(15deg);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-4px) rotateX(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotateX(0deg);
+  }
+}
+
+/* Entrada del botón continuar */
+@keyframes button-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Entrada escalonada de las tarjetas de regalos */
+@keyframes flip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Animación de la cajita de regalo */
+@keyframes gift-bob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-2deg);
+  }
+}
+
+/* Sombreado de curvatura durante el giro 3D de páginas del libro */
+@keyframes page-shade {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Anillos orbitales en la pantalla final */
+@keyframes ring {
+  from {
+    transform: scale(0.7);
+    opacity: 0.95;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+/* Rotación de estrellas orbitales */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Latido de corazón enamorado */
+@keyframes beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.16);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.1);
+  }
+}
+
+/* Revelación progresiva en cascada en la final */
+.finale.active .rise-in {
+  animation: rise-in 0.6s calc(0.1s + var(--i, 0) * 0.12s) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Respeto por preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
